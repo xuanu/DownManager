@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import com.litesuits.orm.db.assit.QueryBuilder;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -55,7 +56,9 @@ public class DownImp {
         if (TextUtils.isEmpty(url)) return;
         if (!isDbExist(url)) OrmUtils.getLiteOrm().save(pTask);
         //查询当前队列是否存在
-        Task tempTask = OrmUtils.getLiteOrm().query(new QueryBuilder<>(Task.class).whereEquals(Constant.URL_KEY, url)).get(0);
+        List<Task> tempList = OrmUtils.getLiteOrm().query(new QueryBuilder<>(Task.class).whereEquals(Constant.URL_KEY, url));
+        if (tempList.isEmpty()) return;
+        Task tempTask = tempList.get(0);
         tempTask.setStatus(Task.STATU_NORMAL);
         if (mRunnableHashMap.containsKey(url)) return;
         DownRunnable tempRunnable = new DownRunnable(this, tempTask);

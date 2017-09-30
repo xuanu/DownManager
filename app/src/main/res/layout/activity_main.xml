@@ -5,12 +5,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="utils.cn.zeffect.downmanager.MainActivity">
 
-    <TextView
+    <Button
+        android:id="@+id/start_down"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-       />
+        android:text="开始下载易智宝文件,地址为：192.168.1.148:8888/wyt/"
+        />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/show"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="不要关闭这个界面，最好，不然WIFI断了，不会重连\n显示进度"/>
+
+    </ScrollView>
 
 </LinearLayout>

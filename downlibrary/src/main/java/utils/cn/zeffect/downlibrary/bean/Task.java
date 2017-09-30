@@ -1,5 +1,6 @@
 package utils.cn.zeffect.downlibrary.bean;
 
+import android.net.Uri;
 import android.text.TextUtils;
 
 import com.litesuits.orm.db.annotation.Column;
@@ -115,7 +116,7 @@ public class Task implements Serializable {
     }
 
     public Task setDownUrl(String pDownUrl) {
-        downUrl = pDownUrl;
+        downUrl = Uri.encode(pDownUrl, "-![.:/,%?&=]");
         return this;
     }
 

@@ -2,6 +2,7 @@ package utils.cn.zeffect.downlibrary.interfaces;
 
 import android.text.TextUtils;
 
+import java.lang.ref.SoftReference;
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
@@ -20,7 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class ListenerUtils {
     public static ListenerUtils instance;
-    private ConcurrentHashMap<String, WeakReference<DownListener>> mHashMap = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<String, SoftReference<DownListener>> mHashMap = new ConcurrentHashMap<>();
 
     public static ListenerUtils getInstance() {
         if (instance == null) {
@@ -38,7 +39,7 @@ public class ListenerUtils {
         if (pListener == null) return;
         if (TextUtils.isEmpty(url)) return;
         if (mHashMap.containsKey(url)) return;
-        mHashMap.put(url, new WeakReference<DownListener>(pListener));
+        mHashMap.put(url, new SoftReference<DownListener>(pListener));
     }
 
     public void removeListener(String url) {
@@ -47,7 +48,7 @@ public class ListenerUtils {
         mHashMap.remove(url);
     }
 
-    public WeakReference<DownListener> getListener(String url) {
+    public SoftReference<DownListener> getListener(String url) {
         if (TextUtils.isEmpty(url)) return null;
         if (!mHashMap.containsKey(url)) return null;
         return mHashMap.get(url);

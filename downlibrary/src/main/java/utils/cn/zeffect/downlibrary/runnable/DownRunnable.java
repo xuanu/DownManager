@@ -1,11 +1,15 @@
 package utils.cn.zeffect.downlibrary.runnable;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 
 import com.litesuits.orm.db.assit.WhereBuilder;
 
+import java.lang.ref.SoftReference;
 import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -57,7 +61,7 @@ public class DownRunnable implements Runnable, Handler.Callback {
      */
     private ExecutorService mExecutorService;
     private CountDownLatch mDownLatch;
-    private WeakReference<DownListener> mDownListener;
+    private SoftReference<DownListener> mDownListener;
     private WeakHandler mWeakHandler;
 
     public DownRunnable(DownImp pImp, Task pDown) {
@@ -107,13 +111,17 @@ public class DownRunnable implements Runnable, Handler.Callback {
         } catch (Exception pE) {
         } finally {
             //根据每个块的下载状态，查看是否全部下载完成
-            ArrayList<Block> tempBlocks = mTask.getBlocks();
             boolean isSucess = true;
-            for (Block tempBlock : tempBlocks) {
-                if (tempBlock.getStatus() != Block.STATU_SUCCESS) {
-                    isSucess = false;
-                    break;
+            if (mTask.getBlocks() != null) {
+                ArrayList<Block> tempBlocks = mTask.getBlocks();
+                for (Block tempBlock : tempBlocks) {
+                    if (tempBlock.getStatus() != Block.STATU_SUCCESS) {
+                        isSucess = false;
+                        break;
+                    }
                 }
+            } else {
+                isSucess = false;
             }
             if (isSucess) {
                 mTask.setStatus(Task.STATU_SUCCESS);
